@@ -1,21 +1,13 @@
-// npm - global command, comes with code
-// npm --version
+const { createReadStream } = require('fs')
 
-// loval dependency - use it onlu int this particular project
-// npm i <packageName>
+const stream = createReadStream('./content/big.txt');
 
-// global dependency - use it in any project
-// npm install - g <packageName>
-// sudo install -g <packageName> (mac)
+// default 64kb
+// ;ast buffer - remainder
+// highwatermark = control size
+// const stream = createReadStream('./content/big.txt', {highWaterMark: 90000});
+// const stream = createReadStream('./content/big.txt', { encoding: 'utf8' });
 
-// package.json - manifest file (stores important info about project/package)
-// manual approach (create package.json in the root, create properties etc)
-// npm init (step by step, press enter to skip)
-// npm init -y (everything default)
-
-
-const _ = require('lodash');
-
-const items = [1, [2, [3, [4]]]]
-const newItems = _.flattenDeep(items);
-console.log(newItems);
+stream.on('data', (result) => {
+    console.log(result);
+})
