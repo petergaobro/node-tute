@@ -1,56 +1,61 @@
-// console.log('Express Tutorial')
+const express = require('express')
+const app = express();
+const { products } = require('./data')
 
-const http = require('http')
-const { readFileSync } = require('fs');
-
-// get all files 
-const homePage = readFileSync('./navbar-app/index.html')
-const homeStyles = readFileSync('./navbar-app/styles.css')
-const homeImage = readFileSync('./navbar-app/logo.svg')
-const homeLogic = readFileSync('./navbar-app/browser-app.js')
-
-const server = http.createServer((req, res) => {
-    // console.log(req.method);
-    const url = req.url;
-    console.log(url);
-    // home page
-    if (url === '/') {
-        console.log(req.url);
-        // res.writeHead(200, { 'content-type': 'text/plain' })
-        res.writeHead(200, { 'content-type': 'text/html' })
-        res.write(homePage)
-        res.end()
+app.get('/', (req, res) => {
+    // res.json(products)
+    res.send('<h1>home page</h1><a href="/api/products">products</a>')
+})
+app.get('/api/products', (req, res) => {
+    // res.json(products)
+    // res.send('<h1>home page</h1><a href="/api/products">products</a>')
+    const newProducts = products.map((product) => {
+        const { id, name, image } = product;
+        return { id, name, image }
+    })
+    res.json(newProducts)
+})
+app.get('/api/products/:productID', (req, res) => {
+    // console.log(req);
+    // console.log(req.params);
+    const { productID } = req.params
+    const singleProduct = products.find((product) => product.id === Number(productID))
+    if (!singleProduct) {
+        return res.status(404).send('Product Does not exist')
     }
-    // about page
-    else if (url === '/about') {
-        console.log(req.url);
-        res.writeHead(200, { 'content-type': 'text/html' })
-        res.write('<h1>about page</h1>')
-        res.end()
-    }
-    // styles
-    else if (url === '/styles.css') {
-        res.writeHead(200, { 'content-type': 'text/css' })
-        res.write(homeStyles)
-        res.end()
-    }
-    // image/logo
-    else if (url === '/logo.svg') {
-        res.writeHead(200, { 'content-type': 'image/svg+xml' })
-        res.write(homeImage)
-        res.end()
-    }
-    // logic
-    else if (url === '/browser-app.js') {
-        res.writeHead(200, { 'content-type': 'text/javascript' })
-        res.write(homeLogic)
-        res.end()
-    }
-    else {
-        res.writeHead(404, { 'content-type': 'text/html' })
-        res.write('<h1>page not found</h1>')
-        res.end()
-    }
+    console.log(singleProduct);
+    return res.json(singleProduct)
 })
 
-server.listen(5000)
+app.get('/api/products/:productID/reviews/:reviewID', (req, res) => {
+    console.log(req.params);
+    res.send('hello world')
+})
+
+app.get('/api/v1/query', (req, res) => {
+    console.log(req.query);
+    const { search, limit } = req.query
+    let sortedproducts = [...products];
+
+    if (search) {
+        sortedproducts = sortedproducts.filter((product) => {
+            return product.name.startsWith(search)
+        })
+    }
+    if (limit) {
+        sortedproducts = sortedproducts.slice(0, Number(limit))
+    }
+
+    if (sortedproducts.length < 1) {
+        // res.status(200).send('no products matched your search')
+
+        // return the current situation with json format
+        return res.status(200).json({ success: true, data: [] })
+    }
+    res.status(200).json(sortedproducts)
+    // res.send('hello world')
+})
+
+app.listen(5000, () => {
+    console.log('server is listening on port 5000 ...');
+})
