@@ -7,13 +7,13 @@ app.use(express.json())
 
 
 
-app.use('/api/v1', tasks)
+// app.use('/api/v1', tasks)   
 
 
 
 
 
-app.use('/api/v1/tasks', tasks)
+app.use('/api/v1/tasks', tasks);
 
 
 

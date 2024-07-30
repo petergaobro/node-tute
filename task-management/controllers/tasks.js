@@ -5,7 +5,7 @@ const getAllTasks = (req, res) => {
 }
 
 const getSingleTask = (req, res) => {
-    res.send('get single task')
+    res.json({ id: req.params.id })
 }
 
 const createTask = (req, res) => {
@@ -13,7 +13,7 @@ const createTask = (req, res) => {
 }
 
 const updateTask = (req, res) => {
-    res.send('update task')
+    res.json({ id: req.params.id })
 }
 
 const deleteTask = (req, res) => {
