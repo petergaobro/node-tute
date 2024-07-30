@@ -8,9 +8,13 @@ const getSingleTask = (req, res) => {
     res.json({ id: req.params.id })
 }
 
-const createTask = async(req, res) => {
-    const task = await Task.create(req.body)
-    res.status(201).json({task})
+const createTask = async (req, res) => {
+    try {
+        const task = await Task.create(req.body)
+        res.status(201).json({ task })
+    } catch (error) {
+        res.status(500).json({ msg: error })
+    }
 }
 
 const updateTask = (req, res) => {
