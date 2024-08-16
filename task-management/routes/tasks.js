@@ -13,6 +13,6 @@ router.route('/').get(getAllTasks)
 router.route('/:id').get(getSingleTask)
 router.route('/create').post(createTask)
 router.route('/update/:id').patch(updateTask)
-router.route('/delete').delete(deleteTask)
+router.route('/delete/:id').delete(deleteTask)
 
 module.exports = router;
