@@ -54,7 +54,7 @@ tasksDOM.addEventListener('click', async (e) => {
     loadingDOM.style.visibility = 'visible'
     const id = el.parentElement.dataset.id
     try {
-      await axios.delete(`/api/v1/tasks/${id}`)
+      await axios.delete(`/api/v1/tasks/delete/ ${id}`)
       showTasks()
     } catch (error) {
       console.log(error)
@@ -70,7 +70,7 @@ formDOM.addEventListener('submit', async (e) => {
   const name = taskInputDOM.value
 
   try {
-    await axios.post('/api/v1/tasks', { name })
+    await axios.post('/api/v1/tasks/create', { name })
     showTasks()
     taskInputDOM.value = ''
     formAlertDOM.style.display = 'block'
